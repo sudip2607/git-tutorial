@@ -1,10 +1,753 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Git Visual Guide</title>
-  </head>
-  <body>
-    <div id="root">Git Visual Guide will go here</div>
-  </body>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complete Git Visual Guide - Interactive Tutorial</title>
+    <meta name="description" content="Learn Git commands visually with simple explanations, analogies, and examples. Perfect for beginners and experienced developers.">
+    <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    
+    <script type="text/babel">
+        function App() {
+          const [activeCategory, setActiveCategory] = React.useState(0);
+          const [activeStep, setActiveStep] = React.useState(0);
+
+          const categories = [
+            {
+              name: "Getting Started",
+              icon: "🚀",
+              color: "blue",
+              commands: [
+                {
+                  title: "git clone",
+                  command: "git clone <url>",
+                  description: "Copy an entire project from a remote repository (GitHub/GitLab) to your computer for the first time",
+                  visual: "☁️ Remote Repository → 💻 Your Computer",
+                  analogy: "Like downloading a shared Google Drive folder to work on it locally",
+                  example: "git clone https://github.com/user/project.git"
+                },
+                {
+                  title: "git init",
+                  command: "git init",
+                  description: "Create a brand new Git repository in your current folder. This starts tracking changes from scratch",
+                  visual: "📁 Regular Folder → 🎯 Git Repository",
+                  analogy: "Like turning on 'Track Changes' in a Word document for the first time",
+                  example: "git init"
+                },
+                {
+                  title: "git status",
+                  command: "git status",
+                  description: "Check the current state: what files changed, what's staged, what's untracked. Your Git dashboard",
+                  visual: "🧠 Shows: Modified ✏️ | Staged 🧺 | Untracked ❓",
+                  analogy: "Like checking 'what's different from the last saved version?'",
+                  example: "git status"
+                }
+              ]
+            },
+            {
+              name: "Daily Workflow",
+              icon: "📝",
+              color: "green",
+              commands: [
+                {
+                  title: "git add",
+                  command: "git add <file> or git add .",
+                  description: "Move your changes to the staging area (preparing them to be committed). Use '.' to add all changed files",
+                  visual: "✏️ Working Directory → 🧺 Staging Area",
+                  analogy: "Like selecting which files you want to include in your next save point",
+                  example: "git add . or git add myfile.js"
+                },
+                {
+                  title: "git commit",
+                  command: "git commit -m \"message\"",
+                  description: "Take a snapshot of all staged changes with a descriptive message. This creates a save point in history",
+                  visual: "🧺 Staging Area → 📸 Local Repository (new commit)",
+                  analogy: "Like saving a version of your document with a note about what you changed",
+                  example: "git commit -m \"Add login feature\""
+                },
+                {
+                  title: "git commit --amend",
+                  command: "git commit --amend",
+                  description: "Fix the last commit message or add forgotten files to it. Only use before pushing!",
+                  visual: "📸 Last Commit → ✏️ Edit → 📸 Updated Commit",
+                  analogy: "Like using 'undo' to fix your last save before sharing it",
+                  example: "git commit --amend -m \"Fixed typo in message\""
+                },
+                {
+                  title: "git diff",
+                  command: "git diff",
+                  description: "Show exactly what changed in your files line by line (what's not staged yet)",
+                  visual: "📄 Old Version ↔️ 📄 New Version (+added / -removed)",
+                  analogy: "Like Word's 'Track Changes' showing red/green edits",
+                  example: "git diff or git diff myfile.js"
+                },
+                {
+                  title: "git diff --staged",
+                  command: "git diff --staged",
+                  description: "Show what changes are in the staging area (what will be committed next)",
+                  visual: "🧺 Staged Changes → 👀 Preview what will be committed",
+                  analogy: "Preview what's about to be saved",
+                  example: "git diff --staged"
+                },
+                {
+                  title: "git log",
+                  command: "git log",
+                  description: "View the history of commits (who changed what and when). Add --oneline for a compact view",
+                  visual: "📚 History: Commit 3 → Commit 2 → Commit 1",
+                  analogy: "Like viewing the version history in Google Docs",
+                  example: "git log --oneline --graph --all"
+                }
+              ]
+            },
+            {
+              name: "Branching",
+              icon: "🌳",
+              color: "purple",
+              commands: [
+                {
+                  title: "git branch",
+                  command: "git branch",
+                  description: "List all local branches. The current branch has a * next to it. Add -a to see remote branches too",
+                  visual: "📋 List: main*, feature/login, bugfix/typo",
+                  analogy: "Like seeing all the different draft versions of a document",
+                  example: "git branch or git branch -a"
+                },
+                {
+                  title: "git branch <name>",
+                  command: "git branch <name>",
+                  description: "Create a new branch from your current position. Doesn't switch to it automatically",
+                  visual: "🌳 Current Branch → 🌿 New Branch (created but not active)",
+                  analogy: "Like creating a new draft copy without opening it yet",
+                  example: "git branch feature/new-feature"
+                },
+                {
+                  title: "git checkout",
+                  command: "git checkout <branch>",
+                  description: "Switch to a different branch. Your files change to match that branch's state",
+                  visual: "🌿 Branch A → 🌿 Branch B (you move between timelines)",
+                  analogy: "Like switching between different draft versions of your work",
+                  example: "git checkout feature/login"
+                },
+                {
+                  title: "git checkout -b",
+                  command: "git checkout -b <name>",
+                  description: "Create a new branch AND switch to it immediately (shortcut for branch + checkout)",
+                  visual: "🌳 Current → 🌿 New Branch (created + switched in one step)",
+                  analogy: "Create a new draft and start working on it right away",
+                  example: "git checkout -b feature/new-feature"
+                },
+                {
+                  title: "git switch",
+                  command: "git switch <branch>",
+                  description: "Modern way to switch branches (clearer than checkout). Use -c to create and switch",
+                  visual: "🌿 Branch A → 🌿 Branch B",
+                  analogy: "Same as checkout but more intuitive",
+                  example: "git switch main or git switch -c feature/xyz"
+                },
+                {
+                  title: "git branch -d",
+                  command: "git branch -d <name>",
+                  description: "Delete a branch that's been merged. Use -D to force delete an unmerged branch",
+                  visual: "🌿 Branch → 🗑️ Deleted",
+                  analogy: "Like deleting an old draft you don't need anymore",
+                  example: "git branch -d feature/old-feature"
+                }
+              ]
+            },
+            {
+              name: "Syncing with Remote",
+              icon: "☁️",
+              color: "indigo",
+              commands: [
+                {
+                  title: "git fetch",
+                  command: "git fetch",
+                  description: "Download information about new commits/branches from remote, but DON'T merge into your work yet",
+                  visual: "☁️ Remote → 📡 Local Info (just checking what's new)",
+                  analogy: "Like checking if there are new emails without opening them",
+                  example: "git fetch origin"
+                },
+                {
+                  title: "git pull",
+                  command: "git pull",
+                  description: "Fetch new changes from remote AND merge them into your current branch (fetch + merge combined)",
+                  visual: "☁️ Remote Branch → 📦 Merge into Your Local Branch",
+                  analogy: "Like syncing your local folder with the shared cloud folder",
+                  example: "git pull origin main"
+                },
+                {
+                  title: "git push",
+                  command: "git push origin <branch>",
+                  description: "Upload your local commits to the remote repository so others can see your work",
+                  visual: "💻 Your Local Commits → ☁️ Remote Repository",
+                  analogy: "Like uploading your changes back to the shared cloud folder",
+                  example: "git push origin feature/my-feature"
+                },
+                {
+                  title: "git push -u",
+                  command: "git push -u origin <branch>",
+                  description: "Push and set up tracking so future pushes/pulls don't need to specify the branch name",
+                  visual: "💻 Local → ☁️ Remote (+ 🔗 link them for future)",
+                  analogy: "Like setting a default save location",
+                  example: "git push -u origin feature/my-feature"
+                },
+                {
+                  title: "git remote -v",
+                  command: "git remote -v",
+                  description: "Show which remote repositories your local repo is connected to (usually 'origin')",
+                  visual: "🔗 Shows: origin → https://github.com/user/repo.git",
+                  analogy: "Like checking which cloud folder you're syncing with",
+                  example: "git remote -v"
+                }
+              ]
+            },
+            {
+              name: "Merging & Rebasing",
+              icon: "🔀",
+              color: "pink",
+              commands: [
+                {
+                  title: "git merge",
+                  command: "git merge <branch>",
+                  description: "Combine another branch's commits into your current branch. Creates a merge commit",
+                  visual: "🌿 Branch A + 🌿 Branch B → 🌳 Combined (merge point)",
+                  analogy: "Like combining two document drafts into one final version",
+                  example: "git merge feature/login (while on main)"
+                },
+                {
+                  title: "git merge --no-ff",
+                  command: "git merge --no-ff <branch>",
+                  description: "Merge and always create a merge commit (even if fast-forward is possible). Preserves branch history",
+                  visual: "🌿 Branch → 🌳 Main (explicit merge commit created)",
+                  analogy: "Keep a record that this was a separate branch",
+                  example: "git merge --no-ff feature/login"
+                },
+                {
+                  title: "git rebase",
+                  command: "git rebase <branch>",
+                  description: "Move your commits to start from the tip of another branch. Makes history linear (cleaner but rewrites history)",
+                  visual: "🌿 Your commits lifted → placed on top of 🌳 target branch",
+                  analogy: "Like rewriting your draft as if you started from the latest version",
+                  example: "git rebase main (while on feature branch)"
+                },
+                {
+                  title: "git rebase -i",
+                  command: "git rebase -i <commit>",
+                  description: "Interactive rebase: reorder, squash, edit, or delete commits. Powerful but advanced",
+                  visual: "📝 Edit commit history: reorder, combine, or remove commits",
+                  analogy: "Like editing your document's revision history",
+                  example: "git rebase -i HEAD~3"
+                },
+                {
+                  title: "Merge Conflicts",
+                  command: "(resolve conflicts manually)",
+                  description: "When Git can't auto-merge, it marks conflicts in files. You edit them, then add and commit to finish",
+                  visual: "⚠️ Conflict → ✏️ You choose → git add → git commit",
+                  analogy: "Like when two people edited the same sentence - you decide which to keep",
+                  example: "Edit files → git add . → git commit"
+                }
+              ]
+            },
+            {
+              name: "Stashing",
+              icon: "📥",
+              color: "yellow",
+              commands: [
+                {
+                  title: "git stash",
+                  command: "git stash",
+                  description: "Temporarily save your uncommitted changes and clean your working directory. Like putting work in a drawer",
+                  visual: "✏️ Changes → 📥 Secret Drawer → Working Directory Clean",
+                  analogy: "Like putting your current work aside to work on something else",
+                  example: "git stash"
+                },
+                {
+                  title: "git stash save",
+                  command: "git stash save \"message\"",
+                  description: "Stash with a descriptive message so you remember what it was",
+                  visual: "✏️ Changes → 📥 Drawer (labeled)",
+                  analogy: "Put work aside with a sticky note describing it",
+                  example: "git stash save \"WIP: login feature\""
+                },
+                {
+                  title: "git stash list",
+                  command: "git stash list",
+                  description: "Show all stashes you've saved. Each has an ID like stash@{0}",
+                  visual: "📋 List: stash@{0}, stash@{1}, stash@{2}",
+                  analogy: "See all the work you've put in drawers",
+                  example: "git stash list"
+                },
+                {
+                  title: "git stash pop",
+                  command: "git stash pop",
+                  description: "Apply the most recent stash and remove it from the stash list. May cause conflicts",
+                  visual: "📥 Drawer → ✏️ Back to Working Directory (stash deleted)",
+                  analogy: "Take your work out of the drawer and continue where you left off",
+                  example: "git stash pop"
+                },
+                {
+                  title: "git stash apply",
+                  command: "git stash apply",
+                  description: "Apply a stash but keep it in the list (doesn't delete it). Use stash@{n} for specific stash",
+                  visual: "📥 Drawer → ✏️ Working Directory (stash kept in drawer)",
+                  analogy: "Copy work from drawer but leave the original there",
+                  example: "git stash apply stash@{1}"
+                },
+                {
+                  title: "git stash drop",
+                  command: "git stash drop",
+                  description: "Delete a stash without applying it",
+                  visual: "📥 Drawer → 🗑️ Deleted",
+                  analogy: "Throw away work you don't need anymore",
+                  example: "git stash drop stash@{0}"
+                },
+                {
+                  title: "git stash clear",
+                  command: "git stash clear",
+                  description: "Delete ALL stashes. Use with caution!",
+                  visual: "📥 All Drawers → 🗑️ All Deleted",
+                  analogy: "Empty all your drawers at once",
+                  example: "git stash clear"
+                }
+              ]
+            },
+            {
+              name: "Undoing Changes",
+              icon: "⏪",
+              color: "red",
+              commands: [
+                {
+                  title: "git restore",
+                  command: "git restore <file>",
+                  description: "Discard changes in a file and restore it to the last committed version. Changes are lost!",
+                  visual: "✏️ Modified File → 📸 Reset to Last Commit",
+                  analogy: "Like hitting 'Revert to Saved' - your edits disappear",
+                  example: "git restore myfile.js"
+                },
+                {
+                  title: "git restore --staged",
+                  command: "git restore --staged <file>",
+                  description: "Remove a file from staging area but keep your changes in the working directory",
+                  visual: "🧺 Staging Area → ✏️ Working Directory (changes kept)",
+                  analogy: "Unselect a file from 'ready to save' but keep your edits",
+                  example: "git restore --staged myfile.js"
+                },
+                {
+                  title: "git reset (soft)",
+                  command: "git reset --soft <commit>",
+                  description: "Move branch pointer to a commit, keep changes staged. Undo commits but keep work",
+                  visual: "📸 Commits undone → 🧺 Changes moved to Staging",
+                  analogy: "Undo the 'save' but keep all your edits ready",
+                  example: "git reset --soft HEAD~1"
+                },
+                {
+                  title: "git reset (mixed)",
+                  command: "git reset <commit>",
+                  description: "Move branch pointer, unstage changes, but keep them in working directory (default mode)",
+                  visual: "📸 Commits undone → ✏️ Changes in Working Directory",
+                  analogy: "Undo saves and unselect files, but keep your edits",
+                  example: "git reset HEAD~1"
+                },
+                {
+                  title: "git reset (hard)",
+                  command: "git reset --hard <commit>",
+                  description: "Move branch pointer and DELETE all changes. Everything goes back to that commit. DANGEROUS!",
+                  visual: "📸 Commits undone → 🗑️ All changes deleted",
+                  analogy: "Revert to an old save and throw away everything after it",
+                  example: "git reset --hard HEAD~1"
+                },
+                {
+                  title: "git revert",
+                  command: "git revert <commit>",
+                  description: "Create a NEW commit that undoes a previous commit. Safe for shared branches (doesn't rewrite history)",
+                  visual: "📸 Bad Commit → 📸 New Commit (that undoes it)",
+                  analogy: "Like adding a new edit that cancels out a previous edit",
+                  example: "git revert abc123"
+                },
+                {
+                  title: "git clean",
+                  command: "git clean -fd",
+                  description: "Delete untracked files and directories. Use -n first to preview what will be deleted",
+                  visual: "❓ Untracked Files → 🗑️ Deleted",
+                  analogy: "Like emptying your trash - removes files Git isn't tracking",
+                  example: "git clean -n (preview) then git clean -fd"
+                }
+              ]
+            },
+            {
+              name: "Advanced & Inspection",
+              icon: "🔍",
+              color: "gray",
+              commands: [
+                {
+                  title: "git show",
+                  command: "git show <commit>",
+                  description: "Show details about a specific commit including the changes (diff) it introduced",
+                  visual: "📸 Commit → 👀 View details + changes",
+                  analogy: "Like opening a specific version to see what changed",
+                  example: "git show abc123"
+                },
+                {
+                  title: "git blame",
+                  command: "git blame <file>",
+                  description: "Show who last modified each line of a file and when. Useful for finding who wrote code",
+                  visual: "📄 File → 👤 Line-by-line author history",
+                  analogy: "Like seeing who wrote each sentence in a shared document",
+                  example: "git blame myfile.js"
+                },
+                {
+                  title: "git tag",
+                  command: "git tag <name>",
+                  description: "Create a named marker for a specific commit (usually for releases like v1.0.0)",
+                  visual: "📸 Commit → 🏷️ Tagged (e.g., v1.0.0)",
+                  analogy: "Like bookmarking an important version",
+                  example: "git tag v1.0.0"
+                },
+                {
+                  title: "git cherry-pick",
+                  command: "git cherry-pick <commit>",
+                  description: "Copy a specific commit from another branch to your current branch",
+                  visual: "🌿 Other Branch (📸 commit) → 🌿 Your Branch (copy)",
+                  analogy: "Like copying one specific edit from another draft",
+                  example: "git cherry-pick abc123"
+                },
+                {
+                  title: "git reflog",
+                  command: "git reflog",
+                  description: "Show a log of where HEAD has been. Useful for recovering 'lost' commits after reset",
+                  visual: "📚 History of everywhere you've been (safety net)",
+                  analogy: "Like your browser history - shows everywhere you've navigated",
+                  example: "git reflog"
+                },
+                {
+                  title: "git bisect",
+                  command: "git bisect start/good/bad",
+                  description: "Binary search through commits to find which one introduced a bug. Advanced debugging tool",
+                  visual: "🔍 Test commits → Find the bad one (binary search)",
+                  analogy: "Like playing 'hot and cold' to find when something broke",
+                  example: "git bisect start → git bisect bad → git bisect good abc123"
+                },
+                {
+                  title: ".gitignore",
+                  command: "(create .gitignore file)",
+                  description: "A file listing patterns of files Git should ignore (e.g., node_modules/, *.log). Not a command but essential",
+                  visual: "📄 .gitignore → 🚫 Git ignores matching files",
+                  analogy: "Like telling Git 'don't track these files'",
+                  example: "Create .gitignore with: node_modules/\n*.log\n.env"
+                }
+              ]
+            }
+          ];
+
+          const currentCategory = categories[activeCategory];
+          const currentCommand = currentCategory.commands[activeStep];
+
+          const colorClasses = {
+            blue: { bg: "bg-blue-50", border: "border-blue-300", text: "text-blue-900", button: "bg-blue-600 hover:bg-blue-700" },
+            green: { bg: "bg-green-50", border: "border-green-300", text: "text-green-900", button: "bg-green-600 hover:bg-green-700" },
+            purple: { bg: "bg-purple-50", border: "border-purple-300", text: "text-purple-900", button: "bg-purple-600 hover:bg-purple-700" },
+            indigo: { bg: "bg-indigo-50", border: "border-indigo-300", text: "text-indigo-900", button: "bg-indigo-600 hover:bg-indigo-700" },
+            pink: { bg: "bg-pink-50", border: "border-pink-300", text: "text-pink-900", button: "bg-pink-600 hover:bg-pink-700" },
+            yellow: { bg: "bg-yellow-50", border: "border-yellow-300", text: "text-yellow-900", button: "bg-yellow-600 hover:bg-yellow-700" },
+            red: { bg: "bg-red-50", border: "border-red-300", text: "text-red-900", button: "bg-red-600 hover:bg-red-700" },
+            gray: { bg: "bg-gray-50", border: "border-gray-300", text: "text-gray-900", button: "bg-gray-600 hover:bg-gray-700" }
+          };
+
+          const colors = colorClasses[currentCategory.color];
+
+          const handleCategoryChange = (idx) => {
+            setActiveCategory(idx);
+            setActiveStep(0);
+          };
+
+          const handleNext = () => {
+            if (activeStep < currentCategory.commands.length - 1) {
+              setActiveStep(activeStep + 1);
+            } else if (activeCategory < categories.length - 1) {
+              setActiveCategory(activeCategory + 1);
+              setActiveStep(0);
+            }
+          };
+
+          const handlePrev = () => {
+            if (activeStep > 0) {
+              setActiveStep(activeStep - 1);
+            } else if (activeCategory > 0) {
+              setActiveCategory(activeCategory - 1);
+              setActiveStep(categories[activeCategory - 1].commands.length - 1);
+            }
+          };
+
+          const isFirstCommand = activeCategory === 0 && activeStep === 0;
+          const isLastCommand = activeCategory === categories.length - 1 && activeStep === currentCategory.commands.length - 1;
+
+          return React.createElement(
+            'div',
+            { className: "min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 p-4 md:p-8" },
+            React.createElement(
+              'div',
+              { className: "max-w-6xl mx-auto" },
+              
+              // Header
+              React.createElement(
+                'div',
+                { className: "text-center mb-8" },
+                React.createElement('h1', { className: "text-4xl md:text-5xl font-bold text-gray-900 mb-3" }, 'Complete Git Command Guide 🚀'),
+                React.createElement('p', { className: "text-gray-700 text-lg" }, 'Visual explanations for all essential Git commands')
+              ),
+
+              // Category Tabs
+              React.createElement(
+                'div',
+                { className: "mb-6 overflow-x-auto" },
+                React.createElement(
+                  'div',
+                  { className: "flex gap-2 min-w-max pb-2" },
+                  categories.map((cat, idx) =>
+                    React.createElement(
+                      'button',
+                      {
+                        key: idx,
+                        onClick: () => handleCategoryChange(idx),
+                        className: `px-4 py-3 rounded-lg font-semibold whitespace-nowrap transition-all ${
+                          activeCategory === idx
+                            ? `${colorClasses[cat.color].button} text-white shadow-lg scale-105`
+                            : 'bg-white text-gray-700 hover:bg-gray-100'
+                        }`
+                      },
+                      React.createElement('span', { className: "mr-2" }, cat.icon),
+                      cat.name
+                    )
+                  )
+                )
+              ),
+
+              // Progress within category
+              React.createElement(
+                'div',
+                { className: "mb-6" },
+                React.createElement(
+                  'div',
+                  { className: "flex justify-between mb-2 text-sm text-gray-600" },
+                  React.createElement('span', null, currentCategory.name),
+                  React.createElement('span', null, `Command ${activeStep + 1} of ${currentCategory.commands.length}`)
+                ),
+                React.createElement(
+                  'div',
+                  { className: "flex gap-1" },
+                  currentCategory.commands.map((_, idx) =>
+                    React.createElement('div', {
+                      key: idx,
+                      className: `h-2 flex-1 rounded ${
+                        idx === activeStep ? colors.button : idx < activeStep ? colors.button.split(' ')[0] : 'bg-gray-300'
+                      }`
+                    })
+                  )
+                )
+              ),
+
+              // Main Command Card
+              React.createElement(
+                'div',
+                { className: "bg-white rounded-xl shadow-2xl p-6 md:p-8 mb-6" },
+                
+                // Title
+                React.createElement(
+                  'div',
+                  { className: "text-center mb-6" },
+                  React.createElement('h2', { className: `text-3xl md:text-4xl font-bold ${colors.text} mb-3` }, currentCommand.title),
+                  React.createElement(
+                    'div',
+                    { className: "bg-gray-900 text-green-400 p-4 rounded-lg font-mono text-sm md:text-base overflow-x-auto" },
+                    currentCommand.command
+                  )
+                ),
+
+                // Content Grid
+                React.createElement(
+                  'div',
+                  { className: "space-y-4" },
+                  
+                  // Visual
+                  React.createElement(
+                    'div',
+                    { className: `${colors.bg} border-2 ${colors.border} p-6 rounded-lg text-center` },
+                    React.createElement('p', { className: "text-2xl md:text-3xl mb-2" }, currentCommand.visual),
+                    React.createElement('p', { className: "text-gray-700 font-semibold text-sm" }, 'Visual Flow')
+                  ),
+
+                  // Description
+                  React.createElement(
+                    'div',
+                    { className: "bg-blue-50 border-2 border-blue-200 p-6 rounded-lg" },
+                    React.createElement(
+                      'h3',
+                      { className: "font-bold text-blue-900 mb-2 flex items-center" },
+                      React.createElement('span', { className: "mr-2" }, '📖'),
+                      ' What it does:'
+                    ),
+                    React.createElement('p', { className: "text-gray-800 text-base md:text-lg leading-relaxed" }, currentCommand.description)
+                  ),
+
+                  // Analogy
+                  React.createElement(
+                    'div',
+                    { className: "bg-purple-50 border-2 border-purple-200 p-6 rounded-lg" },
+                    React.createElement(
+                      'h3',
+                      { className: "font-bold text-purple-900 mb-2 flex items-center" },
+                      React.createElement('span', { className: "mr-2" }, '💡'),
+                      ' Simple analogy:'
+                    ),
+                    React.createElement('p', { className: "text-gray-800 text-base md:text-lg leading-relaxed" }, currentCommand.analogy)
+                  ),
+
+                  // Example
+                  React.createElement(
+                    'div',
+                    { className: "bg-gray-50 border-2 border-gray-300 p-6 rounded-lg" },
+                    React.createElement(
+                      'h3',
+                      { className: "font-bold text-gray-900 mb-2 flex items-center" },
+                      React.createElement('span', { className: "mr-2" }, '⌨️'),
+                      ' Example:'
+                    ),
+                    React.createElement('code', { className: "text-gray-800 text-sm md:text-base bg-white px-3 py-2 rounded block overflow-x-auto" }, currentCommand.example)
+                  )
+                )
+              ),
+
+              // Navigation
+              React.createElement(
+                'div',
+                { className: "flex justify-between items-center gap-4" },
+                React.createElement(
+                  'button',
+                  {
+                    onClick: handlePrev,
+                    disabled: isFirstCommand,
+                    className: `px-6 py-3 rounded-lg font-semibold transition-all ${
+                      isFirstCommand
+                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        : 'bg-gray-700 text-white hover:bg-gray-800 shadow-lg'
+                    }`
+                  },
+                  '← Previous'
+                ),
+
+                React.createElement(
+                  'div',
+                  { className: "text-center" },
+                  React.createElement('div', { className: "text-sm text-gray-600" }, 'Overall Progress'),
+                  React.createElement(
+                    'div',
+                    { className: "font-bold text-gray-900" },
+                    `${categories.slice(0, activeCategory).reduce((sum, cat) => sum + cat.commands.length, 0) + activeStep + 1} / ${categories.reduce((sum, cat) => sum + cat.commands.length, 0)}`
+                  )
+                ),
+
+                React.createElement(
+                  'button',
+                  {
+                    onClick: handleNext,
+                    disabled: isLastCommand,
+                    className: `px-6 py-3 rounded-lg font-semibold transition-all ${
+                      isLastCommand
+                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                        : 'bg-gray-700 text-white hover:bg-gray-800 shadow-lg'
+                    }`
+                  },
+                  'Next →'
+                )
+              ),
+
+              // Quick Jump
+              React.createElement(
+                'div',
+                { className: "mt-8 bg-white rounded-lg shadow-lg p-6" },
+                React.createElement('h3', { className: "font-bold text-gray-900 mb-4 text-center" }, 'Quick Jump to Command'),
+                React.createElement(
+                  'div',
+                  { className: "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 max-h-64 overflow-y-auto" },
+                  currentCategory.commands.map((cmd, idx) =>
+                    React.createElement(
+                      'button',
+                      {
+                        key: idx,
+                        onClick: () => setActiveStep(idx),
+                        className: `px-3 py-2 rounded text-sm font-medium transition-all ${
+                          idx === activeStep
+                            ? `${colors.button} text-white`
+                            : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                        }`
+                      },
+                      cmd.title
+                    )
+                  )
+                )
+              ),
+
+              // Footer Summary
+              React.createElement(
+                'div',
+                { className: "mt-8 bg-gradient-to-r from-green-50 to-blue-50 border-2 border-green-300 rounded-lg p-6" },
+                React.createElement(
+                  'h3',
+                  { className: "font-bold text-green-900 text-xl mb-3 flex items-center" },
+                  React.createElement('span', { className: "mr-2" }, '🎯'),
+                  ' The Big Picture'
+                ),
+                React.createElement(
+                  'p',
+                  { className: "text-gray-800 text-base md:text-lg leading-relaxed mb-3" },
+                  'Git is a ',
+                  React.createElement('strong', null, 'version control system'),
+                  ' - like a time machine for code. It tracks every change, lets multiple people work on different features simultaneously (branches), and helps merge everyone\'s work together.'
+                ),
+                React.createElement(
+                  'div',
+                  { className: "grid md:grid-cols-3 gap-4 mt-4" },
+                  React.createElement(
+                    'div',
+                    { className: "bg-white p-4 rounded-lg" },
+                    React.createElement('div', { className: "text-2xl mb-2" }, '💻'),
+                    React.createElement('div', { className: "font-semibold text-gray-900" }, 'Working Directory'),
+                    React.createElement('div', { className: "text-sm text-gray-600" }, 'Your files as you edit them')
+                  ),
+                  React.createElement(
+                    'div',
+                    { className: "bg-white p-4 rounded-lg" },
+                    React.createElement('div', { className: "text-2xl mb-2" }, '🧺'),
+                    React.createElement('div', { className: "font-semibold text-gray-900" }, 'Staging Area'),
+                    React.createElement('div', { className: "text-sm text-gray-600" }, 'Changes ready to commit')
+                  ),
+                  React.createElement(
+                    'div',
+                    { className: "bg-white p-4 rounded-lg" },
+                    React.createElement('div', { className: "text-2xl mb-2" }, '📸'),
+                    React.createElement('div', { className: "font-semibold text-gray-900" }, 'Repository'),
+                    React.createElement('div', { className: "text-sm text-gray-600" }, 'Saved history of commits')
+                  )
+                )
+              )
+            )
+          );
+        }
+
+        ReactDOM.render(React.createElement(App), document.getElementById('root'));
+    </script>
+</body>
 </html>
